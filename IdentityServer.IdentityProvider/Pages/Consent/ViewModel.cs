@@ -1,7 +1,9 @@
 // Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
-namespace IdentityServer.IdentityProvider.Pages.Consent;
+using System.Collections.Generic;
+
+namespace IdentityServerAspNetIdentity.Pages.Consent;
 
 public class ViewModel
 {

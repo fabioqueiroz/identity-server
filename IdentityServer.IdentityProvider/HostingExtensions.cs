@@ -2,8 +2,12 @@ using Duende.IdentityServer;
 using Duende.IdentityServer.AspNetIdentity;
 using IdentityServer.IdentityProvider.Data;
 using IdentityServer.IdentityProvider.Models;
+using IdentityServerAspNetIdentity.Pages.Admin.ApiScopes;
+using IdentityServerAspNetIdentity.Pages.Admin.Clients;
+using IdentityServerAspNetIdentity.Pages.Admin.IdentityScopes;
 using IdentityServerAspNetIdentity.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -41,7 +45,7 @@ internal static class HostingExtensions
             //.AddInMemoryIdentityResources(Config.IdentityResources)
             //.AddInMemoryApiScopes(Config.ApiScopes)
             //.AddInMemoryClients(Config.Clients)
-            //.AddAspNetIdentity<ApplicationUser>();
+            .AddAspNetIdentity<ApplicationUser>()
             .AddConfigurationStore(options =>
             {
                 options.ConfigureDbContext = b =>
@@ -70,6 +74,19 @@ internal static class HostingExtensions
                 options.ClientId = "copy client ID from Google here";
                 options.ClientSecret = "copy client secret from Google here";
             });
+
+        builder.Services.AddAuthorization(options =>
+                options.AddPolicy("admin",
+                    //policy => policy.RequireClaim("sub", "1"))
+                    policy => policy.RequireClaim("role", "admin"))
+            );
+
+        builder.Services.Configure<RazorPagesOptions>(options =>
+            options.Conventions.AuthorizeFolder("/Admin", "admin"));
+
+        builder.Services.AddTransient<ClientRepository>();
+        builder.Services.AddTransient<IdentityScopeRepository>();
+        builder.Services.AddTransient<ApiScopeRepository>();
 
         return builder.Build();
     }

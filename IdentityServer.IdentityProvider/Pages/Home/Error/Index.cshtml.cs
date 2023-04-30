@@ -1,8 +1,11 @@
+using System.Threading.Tasks;
 using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Hosting;
 
-namespace IdentityServer.IdentityProvider.Pages.Error;
+namespace IdentityServerAspNetIdentity.Pages.Error;
 
 [AllowAnonymous]
 [SecurityHeaders]

@@ -2,7 +2,7 @@
 // See LICENSE in the project root for license information.
 
 
-namespace IdentityServer.IdentityProvider.Pages.Consent;
+namespace IdentityServerAspNetIdentity.Pages.Consent;
 
 public class ConsentOptions
 {

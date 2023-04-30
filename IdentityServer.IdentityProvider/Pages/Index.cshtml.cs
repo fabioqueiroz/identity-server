@@ -1,8 +1,9 @@
+using System.Linq;
 using System.Reflection;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace IdentityServer.IdentityProvider.Pages.Home;
+namespace IdentityServerAspNetIdentity.Pages.Home;
 
 [AllowAnonymous]
 public class Index : PageModel

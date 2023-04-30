@@ -1,8 +1,10 @@
+using System;
+using System.Threading.Tasks;
 using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace IdentityServer.IdentityProvider.Pages.Logout;
+namespace IdentityServerAspNetIdentity.Pages.Logout;
 
 [SecurityHeaders]
 [AllowAnonymous]
