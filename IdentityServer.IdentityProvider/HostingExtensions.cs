@@ -1,6 +1,8 @@
 using Duende.IdentityServer;
+using Duende.IdentityServer.AspNetIdentity;
 using IdentityServer.IdentityProvider.Data;
 using IdentityServer.IdentityProvider.Models;
+using IdentityServerAspNetIdentity.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -13,8 +15,13 @@ internal static class HostingExtensions
     {
         builder.Services.AddRazorPages();
 
+        //builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        //    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+            options.UseSqlServer(connectionString));
 
         builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -31,11 +38,27 @@ internal static class HostingExtensions
                 // see https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/
                 options.EmitStaticAudienceClaim = true;
             })
-            .AddInMemoryIdentityResources(Config.IdentityResources)
-            .AddInMemoryApiScopes(Config.ApiScopes)
-            .AddInMemoryClients(Config.Clients)
-            .AddAspNetIdentity<ApplicationUser>();
-        
+            //.AddInMemoryIdentityResources(Config.IdentityResources)
+            //.AddInMemoryApiScopes(Config.ApiScopes)
+            //.AddInMemoryClients(Config.Clients)
+            //.AddAspNetIdentity<ApplicationUser>();
+            .AddConfigurationStore(options =>
+            {
+                options.ConfigureDbContext = b =>
+                    b.UseSqlServer(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
+            })
+            .AddOperationalStore(options =>
+            {
+                options.ConfigureDbContext = b =>
+                    b.UseSqlServer(connectionString, dbOpts => dbOpts.MigrationsAssembly(typeof(Program).Assembly.FullName));
+
+                // this enables automatic token cleanup. this is optional.
+                options.EnableTokenCleanup = true;
+                options.RemoveConsumedTokens = true;
+            })
+            .AddProfileService<ProfileService>();
+
+
         builder.Services.AddAuthentication()
             .AddGoogle(options =>
             {
