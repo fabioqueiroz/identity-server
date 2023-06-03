@@ -27,7 +27,8 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("ApiScope", policy =>
     {
         policy.RequireAuthenticatedUser();
-        policy.RequireClaim("scope", "scope1");
+        //policy.RequireClaim("scope", "scope1");
+        policy.RequireClaim("scope", "m2m.scope");
     });
 });
 
